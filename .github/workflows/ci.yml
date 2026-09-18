@@ -1,0 +1,35 @@
+name: Test Suite
+
+# 1. TRIGGERS: When should this pipeline run?
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# 2. JOBS: What tasks need to execute?
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest # The OS of the ephemeral runner VM
+
+    steps:
+      # Step 1: Download your repo's source code onto the VM
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Python on the VM
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Step 3: Install pytest and any dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Execute the test runner
+      - name: Run Pytest
+        run: |
+          pytest -v
