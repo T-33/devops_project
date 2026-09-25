@@ -83,22 +83,22 @@ jobs:
           host: ${{secrets.EC2_HOST }}
           username: ${{secrets.EC2_USERNAME }}
           key: ${{secrets.EC2_SSH_KEY }}
-        script: |
-          IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]'):latest"
+          script: |
+            IMAGE_NAME="ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]'):latest"
           
-          echo "Pulling latest image: $IMAGE_NAME"
-          docker pull $IMAGE_NAME
-          
-          echo "Stopping old container..."
-          docker stop my-app || true
-          docker rm my-app || true
-          
-          echo "Starting new container on port 80..."
-          docker run -d \
-            --name my-app \
-            --restart unless-stopped \
-            -p 80:8000 \ 
-            $IMAGE_NAME
-          
-          echo "Cleaning up dangling images to save disk space"
-          docker image prune -af --filter "until=24h"
+            echo "Pulling latest image: $IMAGE_NAME"
+            docker pull $IMAGE_NAME
+            
+            echo "Stopping old container..."
+            docker stop my-app || true
+            docker rm my-app || true
+            
+            echo "Starting new container on port 80..."
+            docker run -d \
+              --name my-app \
+              --restart unless-stopped \
+              -p 80:8000 \
+              $IMAGE_NAME
+            
+            echo "Cleaning up dangling images to save disk space"
+            docker image prune -af --filter "until=24h"
