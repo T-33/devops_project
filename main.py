@@ -1,11 +1,12 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 import uvicorn
 
 app = FastAPI()
 
 @app.get("/")
 def index():
-    return "Some main page"
+    return FileResponse("templates/index.html")
 
 def add(a: float, b: float) -> float:
     return a + b
