@@ -107,7 +107,7 @@ jobs:
             docker run -d \
               --name my-app \
               --restart unless-stopped \
-              -p 80:8000 \
+              -p 127.0.0.1:8000:8000 \
               $IMAGE_NAME
             
             echo "Cleaning up dangling images to save disk space"
