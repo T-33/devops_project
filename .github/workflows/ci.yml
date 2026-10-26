@@ -4,8 +4,12 @@ name: Test Suite
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
   pull_request:
     branches: [ "main" ]
+
 
 permissions:
   contents: read
@@ -39,6 +43,9 @@ jobs:
   
   build-and-push:
     needs: run-tests
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
     runs-on: ubuntu-latest
 
     steps:
@@ -63,13 +70,13 @@ jobs:
           tags: |
             type=raw,value=latest
             type=sha
+            type=raw,value=v${{ github.run_number }}
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{steps.meta.outputs.labels }}
 
   deploy:
