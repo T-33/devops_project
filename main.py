@@ -8,6 +8,10 @@ app = FastAPI()
 def index():
     return FileResponse("templates/index.html")
 
+@app.get("/health")
+def health():
+    return "Service healthy"
+
 def add(a: float, b: float) -> float:
     return a + b
 
